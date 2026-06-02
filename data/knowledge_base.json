@@ -1,0 +1,402 @@
+[
+  {
+    "id": "K001",
+    "point": "HTML5语义化标签（header/nav/main/section/article/footer）",
+    "category": "基础",
+    "reference": "W3C HTML5规范 https://html.spec.whatwg.org/",
+    "difficulty": "基础",
+    "related_skills": ["HTML5语义化"]
+  },
+  {
+    "id": "K002",
+    "point": "CSS3 Flexbox弹性布局（flex-direction/justify-content/align-items）",
+    "category": "基础",
+    "reference": "MDN Web Docs - CSS Flexible Box Layout https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Flexible_Box_Layout",
+    "difficulty": "基础",
+    "related_skills": ["CSS3布局与动画"]
+  },
+  {
+    "id": "K003",
+    "point": "CSS3 Grid网格布局（grid-template-columns/grid-area）",
+    "category": "核心",
+    "reference": "MDN Web Docs - CSS Grid Layout https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_Grid_Layout",
+    "difficulty": "进阶",
+    "related_skills": ["CSS3布局与动画"]
+  },
+  {
+    "id": "K004",
+    "point": "JavaScript ES6+核心语法（let/const/箭头函数/解构/模板字符串）",
+    "category": "基础",
+    "reference": "ECMAScript 2024规范 https://tc39.es/ecma262/",
+    "difficulty": "基础",
+    "related_skills": ["JavaScript核心"]
+  },
+  {
+    "id": "K005",
+    "point": "JavaScript异步编程（Promise/async-await/事件循环机制）",
+    "category": "核心",
+    "reference": "MDN - 异步JavaScript https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/Asynchronous",
+    "difficulty": "进阶",
+    "related_skills": ["JavaScript核心"]
+  },
+  {
+    "id": "K006",
+    "point": "DOM操作与事件机制（事件冒泡/捕获/委托/CustomEvent）",
+    "category": "基础",
+    "reference": "DOM Living Standard https://dom.spec.whatwg.org/",
+    "difficulty": "基础",
+    "related_skills": ["JavaScript核心"]
+  },
+  {
+    "id": "K007",
+    "point": "Vue3组合式API（setup/ref/reactive/computed/watch）",
+    "category": "核心",
+    "reference": "Vue.js官方文档 https://cn.vuejs.org/guide/essentials/reactivity-fundamentals.html",
+    "difficulty": "进阶",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K008",
+    "point": "React Hooks（useState/useEffect/useCallback/useMemo）",
+    "category": "核心",
+    "reference": "React官方文档 https://react.dev/reference/react",
+    "difficulty": "进阶",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K009",
+    "point": "组件化开发思想（单向数据流/Props/状态提升/组合模式）",
+    "category": "核心",
+    "reference": "《Web前端开发职业技能等级标准》中级要求",
+    "difficulty": "进阶",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K010",
+    "point": "前端路由（Vue Router / React Router / hash与history模式）",
+    "category": "核心",
+    "reference": "Vue Router官方文档 https://router.vuejs.org/zh/",
+    "difficulty": "进阶",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K011",
+    "point": "Vite构建工具（开发服务器/HMR/插件系统/构建优化）",
+    "category": "核心",
+    "reference": "Vite官方文档 https://cn.vitejs.dev/",
+    "difficulty": "进阶",
+    "related_skills": ["工程化工具"]
+  },
+  {
+    "id": "K012",
+    "point": "Webpack模块打包（Loader/Plugin/代码分割/Tree Shaking）",
+    "category": "核心",
+    "reference": "Webpack官方文档 https://webpack.js.org/",
+    "difficulty": "高级",
+    "related_skills": ["工程化工具"]
+  },
+  {
+    "id": "K013",
+    "point": "Git版本控制（分支管理/合并策略/rebase/冲突解决）",
+    "category": "基础",
+    "reference": "Pro Git电子书 https://git-scm.com/book/zh/v2",
+    "difficulty": "基础",
+    "related_skills": ["工程化工具"]
+  },
+  {
+    "id": "K014",
+    "point": "npm/pnpm包管理（依赖管理/lock文件/语义版本号/私有源）",
+    "category": "基础",
+    "reference": "npm官方文档 https://docs.npmjs.com/",
+    "difficulty": "基础",
+    "related_skills": ["工程化工具"]
+  },
+  {
+    "id": "K015",
+    "point": "HTTP协议基础（请求方法/状态码/缓存策略/Cookie/跨域CORS）",
+    "category": "基础",
+    "reference": "RFC 9110 HTTP Semantics https://www.rfc-editor.org/rfc/rfc9110",
+    "difficulty": "基础",
+    "related_skills": ["网络通信"]
+  },
+  {
+    "id": "K016",
+    "point": "RESTful API设计（资源命名/HTTP方法语义/分页/错误处理）",
+    "category": "核心",
+    "reference": "RESTful API设计指南 https://restfulapi.net/",
+    "difficulty": "进阶",
+    "related_skills": ["网络通信"]
+  },
+  {
+    "id": "K017",
+    "point": "前端性能优化（懒加载/代码分割/资源压缩/CDN/关键渲染路径）",
+    "category": "核心",
+    "reference": "Web.dev性能指南 https://web.dev/performance/",
+    "difficulty": "高级",
+    "related_skills": ["性能优化"]
+  },
+  {
+    "id": "K018",
+    "point": "浏览器渲染原理（DOM树/CSSOM/布局/绘制/合成层/重排重绘）",
+    "category": "核心",
+    "reference": "Chrome开发者文档 https://developer.chrome.com/docs/devtools/performance/",
+    "difficulty": "高级",
+    "related_skills": ["性能优化"]
+  },
+  {
+    "id": "K019",
+    "point": "TypeScript类型系统（接口/泛型/类型守卫/工具类型）",
+    "category": "拓展",
+    "reference": "TypeScript官方手册 https://www.typescriptlang.org/docs/handbook/",
+    "difficulty": "进阶",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K020",
+    "point": "CSS预处理器（Sass变量/混入/嵌套/函数）",
+    "category": "基础",
+    "reference": "Sass官方文档 https://sass-lang.com/documentation/",
+    "difficulty": "基础",
+    "related_skills": ["CSS3布局与动画"]
+  },
+  {
+    "id": "K021",
+    "point": "响应式设计（媒体查询/移动优先/rem与vw/容器查询）",
+    "category": "核心",
+    "reference": "MDN - 响应式设计 https://developer.mozilla.org/zh-CN/docs/Learn/CSS/CSS_layout/Responsive_Design",
+    "difficulty": "进阶",
+    "related_skills": ["CSS3布局与动画"]
+  },
+  {
+    "id": "K022",
+    "point": "前端安全（XSS防御/CSRF防护/CSP策略/输入校验）",
+    "category": "核心",
+    "reference": "OWASP前端安全指南 https://owasp.org/www-project-web-security-testing-guide/",
+    "difficulty": "进阶",
+    "related_skills": ["安全防护"]
+  },
+  {
+    "id": "K023",
+    "point": "Web无障碍设计（ARIA属性/键盘导航/语义化/对比度）",
+    "category": "拓展",
+    "reference": "WAI-ARIA规范 https://www.w3.org/WAI/ARIA/apg/",
+    "difficulty": "进阶",
+    "related_skills": ["HTML5语义化"]
+  },
+  {
+    "id": "K024",
+    "point": "单元测试（Jest/Vitest/测试覆盖率/mocking）",
+    "category": "拓展",
+    "reference": "Jest官方文档 https://jestjs.io/zh-Hans/",
+    "difficulty": "进阶",
+    "related_skills": ["工程化工具"]
+  },
+  {
+    "id": "K025",
+    "point": "E2E测试（Playwright/Cypress/页面对象模型）",
+    "category": "拓展",
+    "reference": "Playwright官方文档 https://playwright.dev/",
+    "difficulty": "高级",
+    "related_skills": ["工程化工具"]
+  },
+  {
+    "id": "K026",
+    "point": "Node.js基础（模块系统/Express/中间件/文件操作）",
+    "category": "核心",
+    "reference": "Node.js官方文档 https://nodejs.org/zh-cn/docs/",
+    "difficulty": "进阶",
+    "related_skills": ["全栈开发"]
+  },
+  {
+    "id": "K027",
+    "point": "状态管理（Pinia/Redux Toolkit/状态机/响应式原理）",
+    "category": "核心",
+    "reference": "Pinia官方文档 https://pinia.vuejs.org/zh/",
+    "difficulty": "进阶",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K028",
+    "point": "SSR/SSG服务端渲染（Nuxt.js/Next.js/同构渲染原理）",
+    "category": "拓展",
+    "reference": "Nuxt.js官方文档 https://nuxt.com/",
+    "difficulty": "高级",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K029",
+    "point": "WebSocket实时通信（连接管理/心跳/断线重连/消息协议）",
+    "category": "拓展",
+    "reference": "RFC 6455 WebSocket协议 https://www.rfc-editor.org/rfc/rfc6455",
+    "difficulty": "高级",
+    "related_skills": ["网络通信"]
+  },
+  {
+    "id": "K030",
+    "point": "PWA渐进式Web应用（Service Worker/离线缓存/推送通知/manifest）",
+    "category": "拓展",
+    "reference": "MDN - PWA https://developer.mozilla.org/zh-CN/docs/Web/Progressive_web_apps",
+    "difficulty": "高级",
+    "related_skills": ["性能优化"]
+  },
+  {
+    "id": "K031",
+    "point": "CSS动画与过渡（transition/keyframes/transform/GPU加速）",
+    "category": "核心",
+    "reference": "MDN - CSS动画 https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_animations",
+    "difficulty": "进阶",
+    "related_skills": ["CSS3布局与动画"]
+  },
+  {
+    "id": "K032",
+    "point": "设计系统与组件库（设计令牌/组件规范/主题切换/Storybook）",
+    "category": "拓展",
+    "reference": "Storybook官方文档 https://storybook.js.org/",
+    "difficulty": "高级",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K033",
+    "point": "微前端架构（qiankun/Module Federation/沙箱隔离）",
+    "category": "拓展",
+    "reference": "qiankun官方文档 https://qiankun.umijs.org/zh/",
+    "difficulty": "高级",
+    "related_skills": ["架构设计"]
+  },
+  {
+    "id": "K034",
+    "point": "CI/CD持续集成（GitHub Actions/自动化测试/部署流水线）",
+    "category": "拓展",
+    "reference": "GitHub Actions文档 https://docs.github.com/zh/actions",
+    "difficulty": "进阶",
+    "related_skills": ["工程化工具"]
+  },
+  {
+    "id": "K035",
+    "point": "Docker容器化部署（Dockerfile/镜像构建/容器编排）",
+    "category": "拓展",
+    "reference": "Docker官方文档 https://docs.docker.com/",
+    "difficulty": "高级",
+    "related_skills": ["部署运维"]
+  },
+  {
+    "id": "K036",
+    "point": "代码规范与Lint（ESLint/Prettier/Husky/Commitlint）",
+    "category": "基础",
+    "reference": "ESLint官方文档 https://eslint.org/",
+    "difficulty": "基础",
+    "related_skills": ["工程化工具"]
+  },
+  {
+    "id": "K037",
+    "point": "API接口调试（Postman/网络面板/请求拦截/Mock数据）",
+    "category": "基础",
+    "reference": "Postman官方文档 https://learning.postman.com/",
+    "difficulty": "基础",
+    "related_skills": ["网络通信"]
+  },
+  {
+    "id": "K038",
+    "point": "Linux命令行基础（文件操作/权限/进程/Shell脚本）",
+    "category": "基础",
+    "reference": "Linux命令行大全 https://linuxcommand.org/",
+    "difficulty": "基础",
+    "related_skills": ["部署运维"]
+  },
+  {
+    "id": "K039",
+    "point": "前端监控与日志（错误捕获/性能指标/用户行为/告警）",
+    "category": "拓展",
+    "reference": "Web Vitals https://web.dev/vitals/",
+    "difficulty": "高级",
+    "related_skills": ["性能优化"]
+  },
+  {
+    "id": "K040",
+    "point": "低代码平台原理（可视化搭建/组件拖拽/JSON Schema/渲染引擎）",
+    "category": "拓展",
+    "reference": "阿里低代码引擎 https://lowcode-engine.org/",
+    "difficulty": "高级",
+    "related_skills": ["架构设计"]
+  },
+  {
+    "id": "K041",
+    "point": "前端国际化i18n（多语言方案/日期格式/RTL布局）",
+    "category": "拓展",
+    "reference": "vue-i18n文档 https://vue-i18n.intlify.dev/",
+    "difficulty": "进阶",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K042",
+    "point": "Web Components（Custom Elements/Shadow DOM/HTML Templates）",
+    "category": "拓展",
+    "reference": "MDN - Web Components https://developer.mozilla.org/zh-CN/docs/Web/API/Web_components",
+    "difficulty": "进阶",
+    "related_skills": ["HTML5语义化"]
+  },
+  {
+    "id": "K043",
+    "point": "Canvas与SVG图形编程（2D绘图/动画/交互/数据可视化基础）",
+    "category": "拓展",
+    "reference": "MDN - Canvas教程 https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial",
+    "difficulty": "进阶",
+    "related_skills": ["数据可视化"]
+  },
+  {
+    "id": "K044",
+    "point": "数据可视化库（ECharts/D3.js/图表选型/大数据渲染）",
+    "category": "拓展",
+    "reference": "ECharts官方文档 https://echarts.apache.org/zh/",
+    "difficulty": "进阶",
+    "related_skills": ["数据可视化"]
+  },
+  {
+    "id": "K045",
+    "point": "移动端适配（viewport/1px问题/安全区域/触摸事件）",
+    "category": "核心",
+    "reference": "MDN - 移动端Web开发 https://developer.mozilla.org/zh-CN/docs/Web/HTML/Viewport_meta_tag",
+    "difficulty": "进阶",
+    "related_skills": ["响应式设计"]
+  },
+  {
+    "id": "K046",
+    "point": "小程序开发基础（微信小程序/WXML/生命周期/分包加载）",
+    "category": "核心",
+    "reference": "微信小程序官方文档 https://developers.weixin.qq.com/miniprogram/dev/framework/",
+    "difficulty": "进阶",
+    "related_skills": ["跨端开发"]
+  },
+  {
+    "id": "K047",
+    "point": "跨端开发框架（Uni-app/Taro/条件编译/平台差异）",
+    "category": "拓展",
+    "reference": "Uni-app官方文档 https://uniapp.dcloud.net.cn/",
+    "difficulty": "高级",
+    "related_skills": ["跨端开发"]
+  },
+  {
+    "id": "K048",
+    "point": "WebAssembly基础（编译/加载/内存管理/与JS互操作）",
+    "category": "拓展",
+    "reference": "MDN - WebAssembly https://developer.mozilla.org/zh-CN/docs/WebAssembly",
+    "difficulty": "高级",
+    "related_skills": ["架构设计"]
+  },
+  {
+    "id": "K049",
+    "point": "敏捷开发方法（Scrum/看板/用户故事/迭代/回顾）",
+    "category": "基础",
+    "reference": "Scrum Guide https://scrumguides.org/",
+    "difficulty": "基础",
+    "related_skills": ["项目管理"]
+  },
+  {
+    "id": "K050",
+    "point": "代码审查与协作（Pull Request/审查清单/重构原则/技术债管理）",
+    "category": "基础",
+    "reference": "Google工程实践文档 https://google.github.io/eng-practices/review/",
+    "difficulty": "基础",
+    "related_skills": ["项目管理"]
+  }
+]
