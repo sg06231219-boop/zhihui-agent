@@ -77,7 +77,7 @@ async def chat(req: ChatRequest):
                 "temperature": 0.5,
                 "max_tokens": 1000,
             },
-            timeout=30,
+            timeout=15,
         )
         resp.raise_for_status()
         reply = resp.json()["choices"][0]["message"]["content"]
