@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+data/skill_map_history.json
+data/diagnoses.json
+test_result*.txt
+server_log*.txt
