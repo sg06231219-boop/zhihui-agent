@@ -663,6 +663,145 @@ chatInput.addEventListener('keydown', e => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
 });
 
+// ============ 5. 任务转化 ============
+const genConvertBtn = document.getElementById('gen-convert-btn');
+const convertLoading = document.getElementById('convert-loading');
+const convertResult = document.getElementById('convert-result');
+
+// 加载预置任务列表
+async function loadPresetTasks() {
+  try {
+    const resp = await fetch(`${API}/preset-tasks?job_name=前端开发工程师`);
+    const data = await resp.json();
+    if (data.success && data.data) {
+      const container = document.getElementById('preset-tasks-list');
+      container.innerHTML = data.data.map(t => `
+        <div class="preset-task-card" data-task-id="${t.task_id}" data-task-name="${t.task_name}">
+          <div class="ptc-header">
+            <span class="ptc-id">${t.task_id}</span>
+            <span class="ptc-name">${t.task_name}</span>
+          </div>
+          <div class="ptc-meta">
+            <span>📚 ${t.learning_task_count}个学习任务</span>
+            <span>⏱ ${t.total_hours}学时</span>
+            <span>📖 ${t.mapped_courses.join('、')}</span>
+          </div>
+          <div class="ptc-desc">${t.description}</div>
+        </div>
+      `).join('');
+
+      // 点击预置任务卡片
+      container.querySelectorAll('.preset-task-card').forEach(card => {
+        card.addEventListener('click', async () => {
+          const taskId = card.dataset.taskId;
+          document.getElementById('tc-task-name').value = card.dataset.taskName;
+          // 直接加载详情
+          try {
+            const resp = await fetch(`${API}/preset-tasks/${taskId}?job_name=前端开发工程师`);
+            const data = await resp.json();
+            if (data.success) {
+              renderConvertResult(data.data, 'preset');
+              convertResult.style.display = 'block';
+            }
+          } catch(e) {
+            // ignore, user can click convert button
+          }
+        });
+      });
+    }
+  } catch(e) {
+    // 预置任务加载失败不影响主功能
+  }
+}
+
+// 页面加载时获取预置任务
+loadPresetTasks();
+
+// 转化按钮
+genConvertBtn.addEventListener('click', async () => {
+  const jobName = document.getElementById('tc-job-name').value.trim();
+  const taskName = document.getElementById('tc-task-name').value.trim();
+  const taskDesc = document.getElementById('tc-task-desc').value.trim();
+
+  if (!taskName) { alert('请输入典型工作任务名称'); return; }
+
+  genConvertBtn.disabled = true;
+  genConvertBtn.textContent = '转化中...';
+  convertLoading.style.display = 'block';
+  convertResult.style.display = 'none';
+
+  try {
+    const data = await apiCall('/task-convert', {
+      job_name: jobName || '前端开发工程师',
+      task_name: taskName,
+      task_description: taskDesc
+    });
+    renderConvertResult(data.data, data.source);
+    convertResult.style.display = 'block';
+  } catch(e) {
+    alert('转化失败：' + e.message);
+  } finally {
+    genConvertBtn.disabled = false;
+    genConvertBtn.textContent = '🔄 转化为学习型任务';
+    convertLoading.style.display = 'none';
+  }
+});
+
+function renderConvertResult(data, source) {
+  // 兼容单任务和预置列表两种格式
+  const task = data.task_name ? data : (data.typical_tasks ? data.typical_tasks[0] : null);
+  if (!task) return;
+
+  const title = task.task_name || '任务转化结果';
+  document.getElementById('convert-task-title').textContent = `🔄 ${title}`;
+  document.getElementById('convert-job-name').textContent = `岗位：${task.job_name || data.job_name || ''}`;
+  document.getElementById('convert-total-hours').textContent = `总学时：${task.total_hours || '-'}小时`;
+
+  const sourceBadge = document.getElementById('convert-source');
+  sourceBadge.textContent = source === 'fallback' || source === 'preset' ? '📋 预置数据' : '🤖 AI生成';
+  sourceBadge.className = 'source-badge ' + (source === 'fallback' || source === 'preset' ? 'preset' : 'ai');
+
+  const warnEl = document.getElementById('convert-warning');
+  if (data.warning) {
+    warnEl.textContent = '⚠ ' + data.warning;
+    warnEl.style.display = 'inline-block';
+  } else {
+    warnEl.style.display = 'none';
+  }
+
+  document.getElementById('convert-description').textContent = task.description || '';
+
+  // 对应课程
+  const courses = task.mapped_courses || [];
+  const coursesEl = document.getElementById('mapped-courses');
+  coursesEl.innerHTML = courses.map(c => `<span class="course-tag">${c}</span>`).join('');
+
+  // 学习型任务时间线
+  const ltContainer = document.getElementById('learning-tasks');
+  const tasks = task.learning_tasks || [];
+  ltContainer.innerHTML = tasks.map((lt, i) => {
+    const kps = lt.knowledge_points || [];
+    const diffColor = lt.difficulty === '基础' ? '#00e6a7' : lt.difficulty === '进阶' ? '#7c6fff' : '#ff7eb3';
+    return `
+      <div class="lt-item">
+        <div class="lt-marker" style="background:${diffColor}">
+          <span class="lt-step">${i + 1}</span>
+        </div>
+        <div class="lt-content">
+          <div class="lt-header">
+            <h4>${lt.lt_name || lt.name || ''}</h4>
+            <span class="lt-diff" style="color:${diffColor}">${lt.difficulty || ''}</span>
+            <span class="lt-hours">⏱ ${lt.hours || '-'}学时</span>
+          </div>
+          ${kps.length ? `<div class="lt-kps">📚 知识点：${kps.map(k => `<span class="lt-kp">${k}</span>`).join('')}</div>` : ''}
+          ${lt.practice ? `<div class="lt-practice">🛠️ 实践：${lt.practice}</div>` : ''}
+          ${lt.assessment ? `<div class="lt-assess">✅ 考核：${lt.assessment}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 // ============ 初始化 ============
 // 按Enter键触发生成
 document.getElementById('job-input')?.addEventListener('keydown', e => {
