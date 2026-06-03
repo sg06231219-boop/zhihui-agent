@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>职慧Agent — 职业教育岗位技能智能体</title>
+<meta name="description" content="职慧Agent：基于AI的职业教育岗位技能智能体，提供岗位能力图谱生成、个性化学习路径规划、新岗位发现、智能问答服务。">
+<meta name="keywords" content="职业教育,岗位技能,能力图谱,学习路径,AI智能体,前端开发">
+<meta property="og:title" content="职慧Agent — 职业教育岗位技能智能体">
+<meta property="og:description" content="AI驱动的职业教育岗位技能分析平台">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
 <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -13,6 +19,7 @@
     <div class="logo">
       <span class="logo-icon">🎓</span>
       <span class="logo-text">职慧Agent</span>
+      <span class="logo-badge">XA-202603</span>
     </div>
     <div class="nav-tabs">
       <button class="tab active" data-tab="skill-map">能力图谱</button>
@@ -37,6 +44,9 @@
           <option value="大数据技术">大数据技术</option>
           <option value="人工智能技术应用">人工智能技术应用</option>
           <option value="数字媒体技术">数字媒体技术</option>
+          <option value="移动应用开发">移动应用开发</option>
+          <option value="云计算技术应用">云计算技术应用</option>
+          <option value="信息安全技术应用">信息安全技术应用</option>
         </select>
       </div>
       <div class="form-row">
@@ -51,21 +61,35 @@
         <div class="result-meta">
           <span id="result-major"></span>
           <span id="result-time"></span>
+          <span id="result-warning" class="warning-badge" style="display:none"></span>
         </div>
       </div>
+      <!-- 数据概览卡片 -->
+      <div class="stats-row" id="stats-row"></div>
       <!-- 雷达图 -->
       <div class="chart-section">
         <h3>📊 能力维度雷达图</h3>
-        <canvas id="radar-chart" width="400" height="400"></canvas>
+        <canvas id="radar-chart" width="450" height="400"></canvas>
       </div>
       <!-- 技能树 -->
       <div class="skill-tree-section">
         <h3>🌳 技能树</h3>
+        <div class="skill-filter">
+          <button class="filter-btn active" data-filter="all">全部</button>
+          <button class="filter-btn" data-filter="核心能力">核心</button>
+          <button class="filter-btn" data-filter="专业技能">专业</button>
+          <button class="filter-btn" data-filter="工具技能">工具</button>
+          <button class="filter-btn" data-filter="软技能">软技能</button>
+        </div>
         <div id="skill-tree" class="skill-tree"></div>
       </div>
       <!-- 知识点列表 -->
       <div class="knowledge-section">
         <h3>📚 知识点（标注来源）</h3>
+        <div class="knowledge-search">
+          <input type="text" id="kp-search" placeholder="搜索知识点...">
+          <span id="kp-count" class="kp-count"></span>
+        </div>
         <div id="knowledge-list" class="knowledge-list"></div>
       </div>
       <!-- 成长路径 -->
@@ -73,10 +97,16 @@
         <h3>🛤️ 成长路径</h3>
         <div id="career-path" class="career-path"></div>
       </div>
+      <!-- 关联岗位 -->
+      <div class="related-section">
+        <h3>🔗 关联岗位</h3>
+        <div id="related-jobs" class="related-jobs"></div>
+      </div>
     </div>
     <div id="map-loading" class="loading" style="display:none">
       <div class="spinner"></div>
       <p>AI正在生成能力图谱，请稍候...</p>
+      <p class="loading-hint">首次生成可能需要10-15秒</p>
     </div>
   </section>
 
@@ -129,6 +159,7 @@
     <div id="path-loading" class="loading" style="display:none">
       <div class="spinner"></div>
       <p>AI正在诊断学情...</p>
+      <p class="loading-hint">学情诊断 + 路径规划约需15-20秒</p>
     </div>
   </section>
 
@@ -142,6 +173,12 @@
       <div class="form-row">
         <label>技术趋势关键词（逗号分隔）</label>
         <input type="text" id="trend-input" placeholder="如：AI大模型,低代码,Web3">
+      </div>
+      <div class="trend-tags">
+        <span class="trend-tag" data-val="AI大模型,智能体,Agent">🤖 AI+智能体</span>
+        <span class="trend-tag" data-val="低代码,AI编程,Copilot">💻 AI辅助开发</span>
+        <span class="trend-tag" data-val="Web3,区块链,去中心化">🌐 Web3</span>
+        <span class="trend-tag" data-val="Rust,WebAssembly,性能">⚡ 高性能Web</span>
       </div>
       <button id="gen-newjob-btn" class="primary-btn">🧪 发现新岗位</button>
     </div>
@@ -164,8 +201,14 @@
       <div id="chat-messages" class="chat-messages">
         <div class="chat-msg assistant">
           <div class="msg-avatar">🎓</div>
-          <div class="msg-content">你好！我是职慧Agent，可以回答关于前端开发岗位能力要求、学习方法、职业规划等问题。请问有什么可以帮你的？</div>
+          <div class="msg-content">你好！我是职慧Agent，可以回答关于前端开发岗位能力要求、学习方法、职业规划等问题。支持2-3轮追问哦！请问有什么可以帮你的？</div>
         </div>
+      </div>
+      <div class="quick-questions">
+        <span class="quick-q" data-q="前端开发需要掌握哪些核心技能？">核心技能</span>
+        <span class="quick-q" data-q="Vue3和React哪个更适合初学者？">Vue vs React</span>
+        <span class="quick-q" data-q="前端面试常考什么？">面试指南</span>
+        <span class="quick-q" data-q="前端开发的薪资水平怎么样？">薪资参考</span>
       </div>
       <div class="chat-input-area">
         <input type="text" id="chat-input" placeholder="输入你的问题，支持2-3轮追问..." maxlength="500">
@@ -173,6 +216,11 @@
       </div>
     </div>
   </section>
+
+  <!-- 底部 -->
+  <footer class="footer">
+    <p>职慧Agent v1.0 · XA-202603 挑战杯揭榜挂帅参赛项目 · 基于 AI 的职业教育岗位技能智能体</p>
+  </footer>
 </div>
 
 <script src="/static/js/app.js"></script>
