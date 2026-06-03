@@ -6,3 +6,7 @@ data/skill_map_history.json
 data/diagnoses.json
 test_result*.txt
 server_log*.txt
+
+# Test & deploy scripts (not needed in production)
+test_*.py
+push_*.py
