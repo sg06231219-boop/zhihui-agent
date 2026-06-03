@@ -15,7 +15,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from apis.routes import skill_map, learn_path, chat
+from apis.routes import skill_map, learn_path, chat, task_convert
 import uvicorn
 
 BASE_DIR = Path(__file__).parent
@@ -29,6 +29,7 @@ app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="stat
 app.include_router(skill_map.router, prefix="/api/v1", tags=["能力图谱"])
 app.include_router(learn_path.router, prefix="/api/v1", tags=["学习路径"])
 app.include_router(chat.router, prefix="/api/v1", tags=["智能对话"])
+app.include_router(task_convert.router, prefix="/api/v1", tags=["任务转化"])
 
 @app.get("/")
 async def index():
@@ -36,7 +37,7 @@ async def index():
 
 @app.get("/api/v1/health")
 async def health():
-    return {"status": "ok", "service": "zhihui-agent", "version": "1.0.0"}
+    return {"status": "ok", "service": "zhihui-agent", "version": "1.1.0"}
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=int(__import__("os").environ.get("PORT", 8000)))
