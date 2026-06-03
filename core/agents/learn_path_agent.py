@@ -14,8 +14,8 @@ ZHIPUAI_API_KEY = os.environ.get(
     "a3a3123abff546999aeb4547885c4ae8.PocEri894pv9APeu"
 )
 
-def _call_glm(messages: list, temperature: float = 0.3, timeout: int = 10) -> str:
-    """调用智谱GLM-4-flash，短超时"""
+def _call_glm(messages: list, temperature: float = 0.3, timeout: int = 20) -> str:
+    """调用智谱GLM-4-flash"""
     try:
         from core.utils.jwt_helper import generate_token
         token = generate_token(ZHIPUAI_API_KEY)
