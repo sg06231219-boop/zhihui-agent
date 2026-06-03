@@ -65,11 +65,13 @@ async def chat(req: ChatRequest):
         messages.append({"role": msg.role, "content": msg.content})
 
     try:
+        from core.utils.jwt_helper import generate_token
+        token = generate_token(ZHIPUAI_API_KEY)
         resp = requests.post(
             "https://open.bigmodel.cn/api/paas/v4/chat/completions",
             headers={
                 "Content-Type": "application/json",
-                "Authorization": f"Bearer {ZHIPUAI_API_KEY}",
+                "Authorization": f"Bearer {token}",
             },
             json={
                 "model": "glm-4-flash",
