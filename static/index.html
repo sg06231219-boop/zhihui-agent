@@ -26,6 +26,7 @@
       <button class="tab" data-tab="learn-path">学习路径</button>
       <button class="tab" data-tab="new-job">新岗发现</button>
       <button class="tab" data-tab="chat">智能问答</button>
+      <button class="tab" data-tab="task-convert">任务转化</button>
     </div>
   </nav>
 
@@ -217,9 +218,62 @@
     </div>
   </section>
 
+  <!-- 任务转化页 -->
+  <section id="task-convert" class="page">
+    <div class="hero">
+      <h1>🔄 任务转化</h1>
+      <p>将岗位典型工作任务转化为学习型任务，实现「以岗定教」</p>
+    </div>
+    <div class="input-area">
+      <h3>典型工作任务 → 学习型任务</h3>
+      <p class="input-hint">赛题核心方向3：将岗位典型工作任务自动生成教学用学习型工作任务</p>
+      <div class="form-row">
+        <label>岗位名称</label>
+        <input type="text" id="tc-job-name" value="前端开发工程师" placeholder="如：前端开发工程师">
+      </div>
+      <div class="form-row">
+        <label>典型工作任务</label>
+        <input type="text" id="tc-task-name" placeholder="如：开发响应式电商首页">
+      </div>
+      <div class="form-row">
+        <label>任务描述（选填）</label>
+        <textarea id="tc-task-desc" placeholder="描述该工作任务的详细内容" rows="3"></textarea>
+      </div>
+      <div class="preset-tasks-section">
+        <h4>📋 预置典型工作任务（点击填入）</h4>
+        <div id="preset-tasks-list" class="preset-tasks-list"></div>
+      </div>
+      <button id="gen-convert-btn" class="primary-btn">🔄 转化为学习型任务</button>
+    </div>
+    <div id="convert-result" class="result-area" style="display:none">
+      <div class="convert-header">
+        <h2 id="convert-task-title"></h2>
+        <div class="convert-meta">
+          <span id="convert-job-name"></span>
+          <span id="convert-total-hours"></span>
+          <span id="convert-source" class="source-badge"></span>
+          <span id="convert-warning" class="warning-badge" style="display:none"></span>
+        </div>
+        <p id="convert-description" class="convert-desc"></p>
+      </div>
+      <div class="mapped-courses">
+        <h3>📚 对应课程映射</h3>
+        <div id="mapped-courses" class="course-tags"></div>
+      </div>
+      <div class="learning-tasks-timeline">
+        <h3>📝 学习型任务拆解</h3>
+        <div id="learning-tasks" class="lt-timeline"></div>
+      </div>
+    </div>
+    <div id="convert-loading" class="loading" style="display:none">
+      <div class="spinner"></div>
+      <p>AI正在将工作任务转化为学习型任务...</p>
+    </div>
+  </section>
+
   <!-- 底部 -->
   <footer class="footer">
-    <p>职慧Agent v1.0 · XA-202603 挑战杯揭榜挂帅参赛项目 · 基于 AI 的职业教育岗位技能智能体</p>
+    <p>职慧Agent v1.1 · XA-202603 挑战杯揭榜挂帅参赛项目 · 基于 AI 的职业教育岗位技能智能体</p>
   </footer>
 </div>
 
