@@ -777,3 +777,96 @@ body {
   .stats-row { grid-template-columns: repeat(2, 1fr); }
   .related-jobs { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ============ 任务转化页 ============ */
+.input-hint { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.6; }
+.preset-tasks-section { margin: 16px 0; }
+.preset-tasks-section h4 { color: var(--accent-light); font-size: 14px; margin-bottom: 10px; }
+.preset-tasks-list { display: flex; flex-direction: column; gap: 10px; }
+.preset-task-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.preset-task-card:hover {
+  border-color: var(--accent);
+  transform: translateX(4px);
+  box-shadow: 0 0 20px rgba(124,111,255,0.15);
+}
+.ptc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.ptc-id { background: var(--accent); color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+.ptc-name { color: var(--text-primary); font-weight: 600; font-size: 15px; }
+.ptc-meta { display: flex; gap: 16px; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.ptc-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+.convert-header { margin-bottom: 24px; }
+.convert-header h2 { color: var(--text-primary); font-size: 22px; margin-bottom: 8px; }
+.convert-meta { display: flex; gap: 16px; font-size: 13px; color: var(--text-muted); align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+.source-badge { font-size: 12px; padding: 2px 10px; border-radius: 10px; }
+.source-badge.ai { background: rgba(124,111,255,0.2); color: var(--accent-light); }
+.source-badge.preset { background: rgba(0,230,167,0.15); color: var(--success); }
+.convert-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-top: 8px; }
+
+.mapped-courses { margin-bottom: 28px; }
+.mapped-courses h3 { color: var(--accent-light); font-size: 16px; margin-bottom: 12px; }
+.course-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.course-tag {
+  background: rgba(124,111,255,0.12);
+  color: var(--accent-light);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  border: 1px solid rgba(124,111,255,0.25);
+}
+
+.learning-tasks-timeline h3 { color: var(--accent-light); font-size: 16px; margin-bottom: 16px; }
+.lt-timeline { position: relative; padding-left: 40px; }
+.lt-timeline::before {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), var(--success));
+}
+.lt-item { position: relative; margin-bottom: 24px; }
+.lt-marker {
+  position: absolute;
+  left: -40px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  box-shadow: 0 0 12px rgba(124,111,255,0.3);
+}
+.lt-content {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+.lt-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+.lt-header h4 { color: var(--text-primary); font-size: 15px; margin: 0; }
+.lt-diff { font-size: 12px; font-weight: 600; }
+.lt-hours { font-size: 12px; color: var(--text-muted); margin-left: auto; }
+.lt-kps { font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; line-height: 1.8; }
+.lt-kp {
+  display: inline-block;
+  background: rgba(255,255,255,0.06);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  margin: 2px 4px 2px 0;
+  color: var(--text-muted);
+}
+.lt-practice { font-size: 13px; color: var(--accent-light); margin-bottom: 6px; }
+.lt-assess { font-size: 13px; color: var(--success); }
