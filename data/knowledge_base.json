@@ -355,7 +355,7 @@
     "id": "K045",
     "point": "移动端适配（viewport/1px问题/安全区域/触摸事件）",
     "category": "核心",
-    "reference": "MDN - 移动端Web开发 https://developer.mozilla.org/zh-CN/docs/Web/HTML/Viewport_meta_tag",
+    "reference": "MDN - Viewport https://developer.mozilla.org/zh-CN/docs/Web/HTML/Viewport_meta_tag",
     "difficulty": "进阶",
     "related_skills": ["响应式设计"]
   },
@@ -398,5 +398,245 @@
     "reference": "Google工程实践文档 https://google.github.io/eng-practices/review/",
     "difficulty": "基础",
     "related_skills": ["项目管理"]
+  },
+  {
+    "id": "K051",
+    "point": "JavaScript闭包与作用域链（词法作用域/闭包应用/内存泄漏）",
+    "category": "核心",
+    "reference": "MDN - 闭包 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Closures",
+    "difficulty": "进阶",
+    "related_skills": ["JavaScript核心"]
+  },
+  {
+    "id": "K052",
+    "point": "JavaScript原型与继承（原型链/__proto__/class语法糖/继承模式）",
+    "category": "核心",
+    "reference": "ECMAScript规范 Class定义 https://tc39.es/ecma262/#sec-class-definitions",
+    "difficulty": "进阶",
+    "related_skills": ["JavaScript核心"]
+  },
+  {
+    "id": "K053",
+    "point": "JavaScript事件循环详解（宏任务/微任务/执行顺序/Node.js差异）",
+    "category": "核心",
+    "reference": "MDN - 事件循环 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Event_loop",
+    "difficulty": "高级",
+    "related_skills": ["JavaScript核心"]
+  },
+  {
+    "id": "K054",
+    "point": "JavaScript设计模式（观察者/发布订阅/单例/策略/装饰器模式）",
+    "category": "核心",
+    "reference": "《JavaScript设计模式与开发实践》曾探著 人民邮电出版社",
+    "difficulty": "高级",
+    "related_skills": ["架构设计"]
+  },
+  {
+    "id": "K055",
+    "point": "Vue3响应式原理（Proxy/依赖收集/触发更新/副作用追踪）",
+    "category": "核心",
+    "reference": "Vue3响应式原理 https://cn.vuejs.org/guide/extras/reactivity-in-depth.html",
+    "difficulty": "高级",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K056",
+    "point": "React Fiber架构（时间切片/优先级调度/可中断渲染）",
+    "category": "拓展",
+    "reference": "React架构文档 https://github.com/acdlite/react-fiber-architecture",
+    "difficulty": "高级",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K057",
+    "point": "虚拟DOM与Diff算法（树对比/Key的作用/同层比较/最小更新）",
+    "category": "核心",
+    "reference": "Vue3渲染机制 https://cn.vuejs.org/guide/extras/rendering-mechanism.html",
+    "difficulty": "高级",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K058",
+    "point": "前端表单处理（受控组件/表单验证/动态表单/表单状态管理）",
+    "category": "核心",
+    "reference": "Vue表单绑定 https://cn.vuejs.org/guide/essentials/forms.html",
+    "difficulty": "进阶",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K059",
+    "point": "前端错误处理（全局错误捕获/ErrorBoundary/异常上报/降级方案）",
+    "category": "核心",
+    "reference": "React Error Boundaries https://react.dev/reference/react/Component#catching-rendering-errors-with-an-error-boundary",
+    "difficulty": "进阶",
+    "related_skills": ["安全防护"]
+  },
+  {
+    "id": "K060",
+    "point": "HTTPS与TLS加密（证书链/握手过程/混合内容/HPACK）",
+    "category": "核心",
+    "reference": "RFC 8446 TLS 1.3 https://www.rfc-editor.org/rfc/rfc8446",
+    "difficulty": "高级",
+    "related_skills": ["安全防护"]
+  },
+  {
+    "id": "K061",
+    "point": "前端鉴权方案（JWT/Token刷新/OAuth2.0/Session对比）",
+    "category": "核心",
+    "reference": "RFC 7519 JSON Web Token https://www.rfc-editor.org/rfc/rfc7519",
+    "difficulty": "进阶",
+    "related_skills": ["安全防护"]
+  },
+  {
+    "id": "K062",
+    "point": "CSS变量与设计令牌（自定义属性/主题系统/运行时切换）",
+    "category": "核心",
+    "reference": "MDN - CSS自定义属性 https://developer.mozilla.org/zh-CN/docs/Web/CSS/Using_CSS_custom_properties",
+    "difficulty": "进阶",
+    "related_skills": ["CSS3布局与动画"]
+  },
+  {
+    "id": "K063",
+    "point": "BFC块格式化上下文（触发条件/清除浮动/外边距合并/布局隔离）",
+    "category": "核心",
+    "reference": "MDN - 块格式化上下文 https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_display/Block_formatting_context",
+    "difficulty": "进阶",
+    "related_skills": ["CSS3布局与动画"]
+  },
+  {
+    "id": "K064",
+    "point": "HTTP/2与HTTP/3优化（多路复用/服务器推送/QUIC协议/头部压缩）",
+    "category": "拓展",
+    "reference": "RFC 9113 HTTP/2 https://www.rfc-editor.org/rfc/rfc9113",
+    "difficulty": "高级",
+    "related_skills": ["网络通信"]
+  },
+  {
+    "id": "K065",
+    "point": "GraphQL查询语言（Schema定义/查询嵌套/N+1问题/缓存策略）",
+    "category": "拓展",
+    "reference": "GraphQL官方规范 https://spec.graphql.org/",
+    "difficulty": "高级",
+    "related_skills": ["网络通信"]
+  },
+  {
+    "id": "K066",
+    "point": "前端性能指标与度量（FCP/LCP/CLS/INP/Lighthouse评分）",
+    "category": "核心",
+    "reference": "Web Vitals核心指标 https://web.dev/vitals/#core-web-vitals",
+    "difficulty": "进阶",
+    "related_skills": ["性能优化"]
+  },
+  {
+    "id": "K067",
+    "point": "图片优化策略（WebP/AVIF/懒加载/响应式图片/CDN缩略）",
+    "category": "核心",
+    "reference": "Web.dev图片优化 https://web.dev/fast/#optimize-your-images",
+    "difficulty": "进阶",
+    "related_skills": ["性能优化"]
+  },
+  {
+    "id": "K068",
+    "point": "防抖与节流（scroll/resize/input事件优化/实现原理）",
+    "category": "核心",
+    "reference": "MDN - 事件处理优化 https://developer.mozilla.org/zh-CN/docs/Web/Events",
+    "difficulty": "进阶",
+    "related_skills": ["JavaScript核心"]
+  },
+  {
+    "id": "K069",
+    "point": "JavaScript内存管理（垃圾回收/引用计数/标记清除/内存泄漏排查）",
+    "category": "核心",
+    "reference": "MDN - 内存管理 https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Memory_management",
+    "difficulty": "高级",
+    "related_skills": ["JavaScript核心"]
+  },
+  {
+    "id": "K070",
+    "point": "前端构建优化（摇树优化/Scope Hoisting/持久化缓存/并行构建）",
+    "category": "核心",
+    "reference": "Vite构建优化 https://cn.vitejs.dev/guide/build.html",
+    "difficulty": "高级",
+    "related_skills": ["工程化工具"]
+  },
+  {
+    "id": "K071",
+    "point": "Monorepo管理（pnpm workspace/Turborepo/包依赖/发布流程）",
+    "category": "拓展",
+    "reference": "Turborepo官方文档 https://turbo.build/repo/docs",
+    "difficulty": "高级",
+    "related_skills": ["工程化工具"]
+  },
+  {
+    "id": "K072",
+    "point": "Web安全头部配置（X-Frame-Options/CSP/X-Content-Type-Options/HSTS）",
+    "category": "核心",
+    "reference": "OWASP安全响应头 https://owasp.org/www-project-secure-headers/",
+    "difficulty": "进阶",
+    "related_skills": ["安全防护"]
+  },
+  {
+    "id": "K073",
+    "point": "前端面试高频-手写题（防抖节流/深拷贝/发布订阅/Promise实现）",
+    "category": "核心",
+    "reference": "《前端面试与进阶指南》前端社区整理",
+    "difficulty": "进阶",
+    "related_skills": ["JavaScript核心"]
+  },
+  {
+    "id": "K074",
+    "point": "前端面试高频-框架题（Vue3 vs React/Virtual DOM/组件通信/生命周期）",
+    "category": "核心",
+    "reference": "Vue3 FAQ https://cn.vuejs.org/guide/introduction.html | React FAQ https://react.dev/learn",
+    "difficulty": "进阶",
+    "related_skills": ["前端框架应用"]
+  },
+  {
+    "id": "K075",
+    "point": "前端面试高频-网络题（HTTP缓存/TCP三次握手/从输入URL到渲染/跨域方案）",
+    "category": "核心",
+    "reference": "MDN - HTTP缓存 https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Caching",
+    "difficulty": "进阶",
+    "related_skills": ["网络通信"]
+  },
+  {
+    "id": "K076",
+    "point": "前端项目实战-电商首页（轮播/商品列表/购物车/支付对接）",
+    "category": "核心",
+    "reference": "《Web前端开发职业技能等级标准》高级实战要求",
+    "difficulty": "高级",
+    "related_skills": ["项目实战"]
+  },
+  {
+    "id": "K077",
+    "point": "前端项目实战-后台管理系统（权限控制/动态路由/表格CRUD/导出）",
+    "category": "核心",
+    "reference": "Vue3后台模板最佳实践 https://github.com/pure-admin/vue-pure-admin",
+    "difficulty": "高级",
+    "related_skills": ["项目实战"]
+  },
+  {
+    "id": "K078",
+    "point": "前端项目实战-数据看板（实时图表/大屏适配/WebSocket推送/性能优化）",
+    "category": "核心",
+    "reference": "ECharts数据看板实践 https://echarts.apache.org/zh/best-practices",
+    "difficulty": "高级",
+    "related_skills": ["项目实战"]
+  },
+  {
+    "id": "K079",
+    "point": "前端项目部署与运维（Nginx配置/HTTPS/负载均衡/日志分析）",
+    "category": "拓展",
+    "reference": "Nginx官方文档 https://nginx.org/en/docs/",
+    "difficulty": "高级",
+    "related_skills": ["部署运维"]
+  },
+  {
+    "id": "K080",
+    "point": "前端职业发展路径（初级→中级→高级→架构师/技术管理/全栈）",
+    "category": "基础",
+    "reference": "Web前端开发职业技能等级标准（初级/中级/高级）",
+    "difficulty": "基础",
+    "related_skills": ["职业规划"]
   }
 ]
