@@ -62,10 +62,23 @@ async def get_skill_map_history():
 
 @router.post("/new-job")
 async def discover_new_job(req: NewJobRequest):
-    """发现新岗位（赛题要求）"""
+    """发现新岗位（赛题要求），AI失败时使用fallback"""
     from core.agents.skill_map_agent import discover_new_job
 
-    result = discover_new_job(req.trend_keywords)
+    try:
+        result = discover_new_job(req.trend_keywords)
+    except Exception as e:
+        # AI失败时基于关键词生成基础结果
+        kw = ', '.join(req.trend_keywords)
+        result = {
+            "job_name": f"{req.trend_keywords[0]}应用工程师",
+            "core_responsibility": f"将{kw}技术应用于实际业务场景，推动技术落地与创新",
+            "required_skills": [req.trend_keywords[0], "Python", "API集成", "问题分析"],
+            "bonus_skills": ["项目管理", "团队协作", "行业知识"],
+            "scenarios": ["企业数字化转型", "智能化产品开发", "技术咨询与服务"],
+            "why_emerging": f"随着{kw}等技术的快速发展，市场对能够将新技术与业务结合的复合型人才需求激增。",
+            "warning": f"AI分析失败({str(e)[:50]})，使用基础模板",
+        }
     return result
 
 
