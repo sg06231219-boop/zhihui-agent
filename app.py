@@ -20,7 +20,7 @@ import uvicorn
 
 BASE_DIR = Path(__file__).parent
 
-app = FastAPI(title="职慧Agent", version="1.0.0")
+app = FastAPI(title="职慧Agent", version="1.2.0")
 
 # 静态文件
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
@@ -37,7 +37,18 @@ async def index():
 
 @app.get("/api/v1/health")
 async def health():
-    return {"status": "ok", "service": "zhihui-agent", "version": "1.1.0"}
+    return {"status": "ok", "service": "zhihui-agent", "version": "1.2.0"}
+
+@app.get("/api/v1/knowledge-base")
+async def knowledge_base():
+    """返回知识库数据（前端直调智谱API时需要）"""
+    import json
+    kb_path = BASE_DIR / "data" / "knowledge_base.json"
+    try:
+        with open(kb_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except:
+        return []
 
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=int(__import__("os").environ.get("PORT", 8000)))
