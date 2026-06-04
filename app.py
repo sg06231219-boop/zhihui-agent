@@ -15,12 +15,12 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from apis.routes import skill_map, learn_path, chat, task_convert, analytics
+from apis.routes import skill_map, learn_path, chat, task_convert, analytics, admin
 import uvicorn
 
 BASE_DIR = Path(__file__).parent
 
-app = FastAPI(title="职慧Agent", version="1.3.0")
+app = FastAPI(title="职慧Agent", version="1.3.1")
 
 # 静态文件
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
@@ -31,6 +31,7 @@ app.include_router(learn_path.router, prefix="/api/v1", tags=["学习路径"])
 app.include_router(chat.router, prefix="/api/v1", tags=["智能对话"])
 app.include_router(task_convert.router, prefix="/api/v1", tags=["任务转化"])
 app.include_router(analytics.router, prefix="/api/v1", tags=["访问统计"])
+app.include_router(admin.router, prefix="/api/v1", tags=["管理后台"])
 
 @app.get("/")
 async def index():
@@ -38,7 +39,11 @@ async def index():
 
 @app.get("/api/v1/health")
 async def health():
-    return {"status": "ok", "service": "zhihui-agent", "version": "1.3.0"}
+    return {"status": "ok", "service": "zhihui-agent", "version": "1.3.1"}
+
+@app.get("/admin")
+async def admin_page():
+    return FileResponse(str(BASE_DIR / "static" / "admin.html"))
 
 @app.get("/api/v1/knowledge-base")
 async def knowledge_base():
