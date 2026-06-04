@@ -1,4 +1,4 @@
-/* 职慧Agent v1.1 - 交互逻辑升级 */
+/* 职慧Agent v1.2 - 前端直调智谱API优化版 */
 
 // ============ Tab 切换 ============
 document.querySelectorAll('.nav-tabs .tab').forEach(btn => {
@@ -25,6 +25,12 @@ async function apiCall(path, body) {
   return resp.json();
 }
 
+// ============ AI调用策略：前端直调优先，后端fallback ============
+function getAISource() {
+  // 有API Key → 前端直调(2-3秒)；无Key → 后端代理(15-20秒)
+  return window.ZhipuAPI && window.ZhipuAPI.hasApiKey() ? 'direct' : 'server';
+}
+
 // ============ 1. 岗位能力图谱 ============
 let currentSkillData = null;
 
@@ -43,7 +49,26 @@ genMapBtn.addEventListener('click', async () => {
   mapResult.style.display = 'none';
 
   try {
-    const data = await apiCall('/skill-map', { job_name: jobName, major });
+    let data;
+    const apiKey = window.ZhipuAPI ? window.ZhipuAPI.getApiKey() : '';
+    if (apiKey && apiKey.includes('.')) {
+      // 前端直调智谱API — 2-3秒响应
+      try {
+        data = await window.ZhipuAPI.directBuildSkillMap(jobName, major, apiKey);
+        // 合并本地知识库
+        const kbResp = await fetch(`${API}/knowledge-base`);
+        if (kbResp.ok) data.knowledge_points = await kbResp.json();
+        data.ai_used = true;
+        data.ai_source = 'direct';
+      } catch (directErr) {
+        console.warn('前端直调失败，降级到后端:', directErr);
+        data = await apiCall('/skill-map', { job_name: jobName, major });
+        data.warning = (data.warning || '') + ' [直调失败，已降级]';
+      }
+    } else {
+      // 后端代理模式
+      data = await apiCall('/skill-map', { job_name: jobName, major });
+    }
     currentSkillData = data;
     renderSkillMap(data, jobName, major);
     mapResult.style.display = 'block';
@@ -349,16 +374,40 @@ genPathBtn.addEventListener('click', async () => {
   document.getElementById('path-result').style.display = 'none';
 
   try {
-    const diag = await apiCall('/diagnose', {
-      user_profile: { skills, experience, projects: [] },
-      target_job: targetJob,
-    });
-
-    const path = await apiCall('/learn-path', {
-      diagnosis: diag,
-      target_job: targetJob,
-      weeks,
-    });
+    let diag, path;
+    const apiKey = window.ZhipuAPI ? window.ZhipuAPI.getApiKey() : '';
+    if (apiKey && apiKey.includes('.')) {
+      try {
+        // 前端直调智谱API — 一次返回诊断+路径
+        const result = await window.ZhipuAPI.directLearnPath(
+          targetJob, skills.join(','), experience, weeks, apiKey
+        );
+        diag = result.diagnosis || { match_score: 0, strengths: [], gaps: [], current_level: '未知' };
+        path = result.path || [];
+        diag.ai_source = 'direct';
+      } catch (directErr) {
+        console.warn('直调失败，降级后端:', directErr);
+        diag = await apiCall('/diagnose', {
+          user_profile: { skills, experience, projects: [] },
+          target_job: targetJob,
+        });
+        path = await apiCall('/learn-path', {
+          diagnosis: diag,
+          target_job: targetJob,
+          weeks,
+        });
+      }
+    } else {
+      diag = await apiCall('/diagnose', {
+        user_profile: { skills, experience, projects: [] },
+        target_job: targetJob,
+      });
+      path = await apiCall('/learn-path', {
+        diagnosis: diag,
+        target_job: targetJob,
+        weeks,
+      });
+    }
 
     renderLearnPath(diag, path);
     document.getElementById('path-result').style.display = 'block';
@@ -546,7 +595,19 @@ genNewJobBtn.addEventListener('click', async () => {
   document.getElementById('newjob-result').style.display = 'none';
 
   try {
-    const data = await apiCall('/new-job', { trend_keywords: trends });
+    let data;
+    const apiKey = window.ZhipuAPI ? window.ZhipuAPI.getApiKey() : '';
+    if (apiKey && apiKey.includes('.')) {
+      try {
+        data = await window.ZhipuAPI.directDiscoverNewJob(trends, apiKey);
+        data.ai_source = 'direct';
+      } catch (directErr) {
+        console.warn('前端直调失败，降级到后端:', directErr);
+        data = await apiCall('/new-job', { trend_keywords: trends });
+      }
+    } else {
+      data = await apiCall('/new-job', { trend_keywords: trends });
+    }
     renderNewJob(data);
     document.getElementById('newjob-result').style.display = 'block';
   } catch (e) {
@@ -642,14 +703,30 @@ async function sendChat() {
   showTyping();
 
   try {
-    const data = await fetch(`${API}/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: recentHistory }),
-    }).then(r => r.json());
-
+    let reply;
+    const apiKey = window.ZhipuAPI ? window.ZhipuAPI.getApiKey() : '';
+    if (apiKey && apiKey.includes('.')) {
+      try {
+        // 前端直调智谱API
+        reply = await window.ZhipuAPI.directChat(recentHistory, apiKey);
+      } catch (directErr) {
+        console.warn('直调失败，降级后端:', directErr);
+        const data = await fetch(`${API}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: recentHistory }),
+        }).then(r => r.json());
+        reply = data.reply || '抱歉，我暂时无法回答这个问题。';
+      }
+    } else {
+      const data = await fetch(`${API}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: recentHistory }),
+      }).then(r => r.json());
+      reply = data.reply || '抱歉，我暂时无法回答这个问题。';
+    }
     removeTyping();
-    const reply = data.reply || '抱歉，我暂时无法回答这个问题。';
     chatHistory.push({ role: 'assistant', content: reply });
     appendChatMsg('assistant', reply);
   } catch (e) {
@@ -731,11 +808,31 @@ genConvertBtn.addEventListener('click', async () => {
   convertResult.style.display = 'none';
 
   try {
-    const data = await apiCall('/task-convert', {
-      job_name: jobName || '前端开发工程师',
-      task_name: taskName,
-      task_description: taskDesc
-    });
+    let data;
+    const apiKey = window.ZhipuAPI ? window.ZhipuAPI.getApiKey() : '';
+    if (apiKey && apiKey.includes('.')) {
+      try {
+        // 前端直调智谱API
+        const result = await window.ZhipuAPI.directTaskConvert(
+          jobName || '前端开发工程师', taskName, taskDesc, apiKey
+        );
+        data = { data: result, source: 'ai' };
+        data.data.ai_source = 'direct';
+      } catch (directErr) {
+        console.warn('直调失败，降级后端:', directErr);
+        data = await apiCall('/task-convert', {
+          job_name: jobName || '前端开发工程师',
+          task_name: taskName,
+          task_description: taskDesc
+        });
+      }
+    } else {
+      data = await apiCall('/task-convert', {
+        job_name: jobName || '前端开发工程师',
+        task_name: taskName,
+        task_description: taskDesc
+      });
+    }
     renderConvertResult(data.data, data.source);
     convertResult.style.display = 'block';
   } catch(e) {
@@ -810,3 +907,63 @@ document.getElementById('job-input')?.addEventListener('keydown', e => {
 document.getElementById('trend-input')?.addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('gen-newjob-btn').click();
 });
+
+// ============ API Key配置页 ============
+const apiKeyInput = document.getElementById('api-key-input');
+const apiKeyStatus = document.getElementById('api-key-status');
+
+// 页面加载时恢复已保存的Key
+if (window.ZhipuAPI && window.ZhipuAPI.hasApiKey()) {
+  apiKeyInput.value = window.ZhipuAPI.getApiKey().slice(0, 4) + '****' + window.ZhipuAPI.getApiKey().slice(-4);
+  apiKeyInput.dataset.masked = 'true';
+  showApiKeyStatus('✅ 已配置API Key，AI响应速度2-3秒', 'success');
+}
+
+document.getElementById('save-api-key-btn')?.addEventListener('click', () => {
+  const key = apiKeyInput.value.trim();
+  if (!key || !key.includes('.')) {
+    showApiKeyStatus('❌ Key格式错误，应为 xxxxx.yyyyy 格式', 'error');
+    return;
+  }
+  if (key.includes('*')) {
+    showApiKeyStatus('⚠️ Key已保存，无需重复输入。如需更换请先清除。', 'info');
+    return;
+  }
+  window.ZhipuAPI.setApiKey(key);
+  apiKeyInput.value = key.slice(0, 4) + '****' + key.slice(-4);
+  apiKeyInput.dataset.masked = 'true';
+  showApiKeyStatus('✅ 已保存！所有AI功能现在直连智谱，响应速度2-3秒', 'success');
+});
+
+document.getElementById('test-api-key-btn')?.addEventListener('click', async () => {
+  const key = window.ZhipuAPI ? window.ZhipuAPI.getApiKey() : '';
+  if (!key || !key.includes('.')) {
+    showApiKeyStatus('❌ 请先输入并保存API Key', 'error');
+    return;
+  }
+  showApiKeyStatus('🔄 正在测试连接...', 'info');
+  try {
+    const start = Date.now();
+    const reply = await window.ZhipuAPI.directChat(
+      [{ role: 'user', content: '你好，1+1=?' }], key
+    );
+    const elapsed = ((Date.now() - start) / 1000).toFixed(1);
+    showApiKeyStatus(`✅ 连接成功！响应时间 ${elapsed}秒，回复：${reply.slice(0, 50)}`, 'success');
+  } catch (e) {
+    showApiKeyStatus(`❌ 连接失败：${e.message.slice(0, 100)}`, 'error');
+  }
+});
+
+document.getElementById('clear-api-key-btn')?.addEventListener('click', () => {
+  localStorage.removeItem('zhipu_api_key');
+  apiKeyInput.value = '';
+  apiKeyInput.dataset.masked = 'false';
+  showApiKeyStatus('🗑️ 已清除API Key，AI将使用服务器代理模式（较慢）', 'info');
+});
+
+function showApiKeyStatus(msg, type) {
+  if (!apiKeyStatus) return;
+  apiKeyStatus.textContent = msg;
+  apiKeyStatus.className = `api-key-status ${type}`;
+  apiKeyStatus.style.display = 'block';
+}
