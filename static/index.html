@@ -27,6 +27,7 @@
       <button class="tab" data-tab="new-job">新岗发现</button>
       <button class="tab" data-tab="chat">智能问答</button>
       <button class="tab" data-tab="task-convert">任务转化</button>
+      <button class="tab api-key-tab" data-tab="api-key" title="配置AI加速">🔑</button>
     </div>
   </nav>
 
@@ -271,12 +272,44 @@
     </div>
   </section>
 
+  <!-- API Key配置页 -->
+  <section id="api-key" class="page">
+    <div class="hero">
+      <h1>🔑 AI加速配置</h1>
+      <p>配置你的智谱API Key，让AI响应从15秒降到2-3秒！</p>
+    </div>
+    <div class="input-area api-key-config">
+      <div class="api-key-explain">
+        <h3>为什么需要API Key？</h3>
+        <p>默认情况下，AI请求经海外服务器中转，延迟高(15-20秒)。配置API Key后，<strong>AI请求从你的浏览器直连智谱</strong>，响应速度提升10倍！</p>
+        <h3>如何获取？</h3>
+        <ol>
+          <li>访问 <a href="https://open.bigmodel.cn/" target="_blank">open.bigmodel.cn</a> 注册账号</li>
+          <li>进入「API Keys」页面，创建新Key</li>
+          <li>复制Key（格式：<code>xxxxx.yyyyy</code>），粘贴到下方</li>
+        </ol>
+        <p class="api-note">💡 智谱GLM-4-flash免费额度充足，个人使用基本不产生费用。Key仅存储在你的浏览器本地，不会上传服务器。</p>
+      </div>
+      <div class="form-row">
+        <label>智谱API Key</label>
+        <input type="password" id="api-key-input" placeholder="粘贴你的智谱API Key（格式: id.secret）" autocomplete="off">
+      </div>
+      <div class="api-key-actions">
+        <button id="save-api-key-btn" class="primary-btn">💾 保存Key</button>
+        <button id="test-api-key-btn" class="secondary-btn">🧪 测试连接</button>
+        <button id="clear-api-key-btn" class="secondary-btn danger-btn">🗑️ 清除Key</button>
+      </div>
+      <div id="api-key-status" class="api-key-status"></div>
+    </div>
+  </section>
+
   <!-- 底部 -->
   <footer class="footer">
-    <p>职慧Agent v1.1 · XA-202603 挑战杯揭榜挂帅参赛项目 · 基于 AI 的职业教育岗位技能智能体</p>
+    <p>职慧Agent v1.2 · XA-202603 挑战杯揭榜挂帅参赛项目 · 基于 AI 的职业教育岗位技能智能体</p>
   </footer>
 </div>
 
+<script src="/static/js/zhipu-api.js"></script>
 <script src="/static/js/app.js"></script>
 </body>
 </html>
