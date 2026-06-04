@@ -311,5 +311,18 @@
 
 <script src="/static/js/zhipu-api.js"></script>
 <script src="/static/js/app.js"></script>
+<script>
+(function(){
+  var p={path:location.pathname,title:document.title,referrer:document.referrer,duration:0};
+  var d={type:/Mobi|Android|iPhone/i.test(navigator.userAgent)?"mobile":"desktop",screenWidth:screen.width};
+  var b={page:p,device:d,event:"pageview"};
+  navigator.sendBeacon?navigator.sendBeacon("/api/v1/analytics/track",JSON.stringify(b)):fetch("/api/v1/analytics/track",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(b),keepalive:true});
+  var t=Date.now();
+  window.addEventListener("beforeunload",function(){
+    var dur=Math.round((Date.now()-t)/1000);
+    navigator.sendBeacon?navigator.sendBeacon("/api/v1/analytics/track",JSON.stringify({page:{path:location.pathname,title:document.title,referrer:"",duration:dur},device:{},event:"leave"})):void 0;
+  });
+})();
+</script>
 </body>
 </html>
