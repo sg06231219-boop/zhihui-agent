@@ -969,3 +969,7 @@ body {
 .api-key-status.info { display: block; background: rgba(124,111,255,0.1); border: 1px solid rgba(124,111,255,0.2); color: var(--accent-light); }
 .api-key-tab { font-size: 18px; }
 
+/* === 流式聊天光标 === */
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+.chat-msg.streaming .msg-content { color: var(--text-primary); }
+
