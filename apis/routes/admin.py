@@ -128,7 +128,7 @@ async def stats(request: Request):
             pass
 
     return {
-        "version": "1.3.0",
+        "version": "1.3.1",
         "knowledge_base_count": kb_count,
         "today_pv": today_pv,
         "today_uv": today_uv,
