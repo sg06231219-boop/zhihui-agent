@@ -39,7 +39,12 @@ async def index():
 
 @app.get("/api/v1/health")
 async def health():
-    return {"status": "ok", "service": "zhihui-agent", "version": "1.3.1"}
+    api_key = bool(os.environ.get("ZHIPUAI_API_KEY"))
+    return {"status": "ok" if api_key else "degraded", "service": "zhihui-agent", "version": "1.3.1", "api_key_configured": api_key}
+
+@app.get("/robots.txt")
+async def robots():
+    return FileResponse(str(BASE_DIR / "static" / "robots.txt"), media_type="text/plain")
 
 @app.get("/admin")
 async def admin_page():
