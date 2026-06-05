@@ -224,12 +224,64 @@ async function directLearnPath(targetJob, skills, experience, weeks, apiKey) {
   return extractJson(content);
 }
 
+/**
+ * 智能问答（前端直调 - 流式输出）
+ */
+async function directChatStream(messages, apiKey, onChunk) {
+  const token = await generateJwt(apiKey);
+  const resp = await fetch(ZHIPU_API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      model: 'glm-4-flash',
+      messages,
+      temperature: 0.7,
+      max_tokens: 800,
+      stream: true,
+    }),
+  });
+
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error(`智谱API错误(${resp.status}): ${err.slice(0, 100)}`);
+  }
+
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = '';
+  let fullText = '';
+
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split('\n');
+    buffer = lines.pop() || '';
+    for (const line of lines) {
+      if (line.startsWith('data: ')) {
+        const d = line.slice(6);
+        if (d === '[DONE]') return fullText;
+        try {
+          const j = JSON.parse(d);
+          const ch = (j.choices?.[0]?.delta?.content) || '';
+          if (ch) { fullText += ch; if (onChunk) onChunk(ch); }
+        } catch (e) {}
+      }
+    }
+  }
+  return fullText;
+}
+
 // 导出
 window.ZhipuAPI = {
   callZhipu,
   directBuildSkillMap,
   directDiscoverNewJob,
   directChat,
+  directChatStream,
   directTaskConvert,
   directLearnPath,
   getApiKey,
