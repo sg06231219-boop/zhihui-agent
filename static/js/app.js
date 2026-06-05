@@ -703,20 +703,29 @@ async function sendChat() {
   showTyping();
 
   try {
-    let reply;
+    let reply = '';
     const apiKey = window.ZhipuAPI ? window.ZhipuAPI.getApiKey() : '';
     if (apiKey && apiKey.includes('.')) {
       try {
-        // 前端直调智谱API
-        reply = await window.ZhipuAPI.directChat(recentHistory, apiKey);
+        // 前端直调智谱API - 流式输出
+        removeTyping();
+        const streamDiv = appendStreamingMsg();
+        reply = await window.ZhipuAPI.directChatStream(recentHistory, apiKey, (chunk) => {
+          appendStreamChunk(streamDiv, chunk);
+        });
+        finalizeStreamMsg(streamDiv, reply);
       } catch (directErr) {
         console.warn('直调失败，降级后端:', directErr);
+        removeTyping();
+        showTyping();
         const data = await fetch(`${API}/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ messages: recentHistory }),
         }).then(r => r.json());
         reply = data.reply || '抱歉，我暂时无法回答这个问题。';
+        removeTyping();
+        appendChatMsg('assistant', reply);
       }
     } else {
       const data = await fetch(`${API}/chat`, {
@@ -725,14 +734,39 @@ async function sendChat() {
         body: JSON.stringify({ messages: recentHistory }),
       }).then(r => r.json());
       reply = data.reply || '抱歉，我暂时无法回答这个问题。';
+      removeTyping();
+      appendChatMsg('assistant', reply);
     }
-    removeTyping();
     chatHistory.push({ role: 'assistant', content: reply });
-    appendChatMsg('assistant', reply);
   } catch (e) {
     removeTyping();
     appendChatMsg('assistant', '抱歉，服务暂时不可用，请稍后再试。');
   }
+}
+
+function appendStreamingMsg() {
+  const div = document.createElement('div');
+  div.className = 'chat-msg assistant streaming';
+  div.innerHTML = `
+    <div class="msg-avatar">🎓</div>
+    <div class="msg-content"><span class="stream-text"></span><span class="stream-cursor" style="color:var(--accent);animation:blink 0.8s step-end infinite">▋</span></div>
+  `;
+  chatMessages.appendChild(div);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return div.querySelector('.stream-text');
+}
+
+function appendStreamChunk(el, chunk) {
+  el.textContent += chunk;
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function finalizeStreamMsg(el, fullText) {
+  const contentDiv = el.parentElement;
+  contentDiv.querySelector('.stream-cursor')?.remove();
+  el.textContent = '';
+  contentDiv.innerHTML = fullText.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 chatSendBtn.addEventListener('click', sendChat);
