@@ -20,7 +20,7 @@ import uvicorn
 
 BASE_DIR = Path(__file__).parent
 
-app = FastAPI(title="职慧Agent", version="1.3.1")
+app = FastAPI(title="职慧Agent", version="1.3.2")
 
 # 静态文件
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
@@ -40,7 +40,33 @@ async def index():
 @app.get("/api/v1/health")
 async def health():
     api_key = bool(os.environ.get("ZHIPUAI_API_KEY"))
-    return {"status": "ok" if api_key else "degraded", "service": "zhihui-agent", "version": "1.3.1", "api_key_configured": api_key}
+    return {"status": "ok" if api_key else "degraded", "service": "zhihui-agent", "version": "1.3.2", "api_key_configured": api_key}
+
+@app.get("/api/v1/stats")
+async def get_stats():
+    """返回服务统计信息"""
+    import json as _json
+    kb_path = BASE_DIR / "data" / "knowledge_base.json"
+    history_path = BASE_DIR / "data" / "skill_map_history.json"
+    kb_count = 0
+    history_count = 0
+    try:
+        with open(kb_path, "r", encoding="utf-8") as f:
+            kb_count = len(_json.load(f))
+    except:
+        pass
+    try:
+        with open(history_path, "r", encoding="utf-8") as f:
+            history_count = len(_json.load(f))
+    except:
+        pass
+    return {
+        "service": "zhihui-agent",
+        "version": "1.3.2",
+        "knowledge_base_entries": kb_count,
+        "skill_map_history_count": history_count,
+        "api_key_configured": bool(os.environ.get("ZHIPUAI_API_KEY"))
+    }
 
 @app.get("/robots.txt")
 async def robots():
