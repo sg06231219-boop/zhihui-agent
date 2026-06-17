@@ -16,6 +16,10 @@
 <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
+<!-- 阅读进度条 -->
+<div id="reading-progress"></div>
+<!-- 回到顶部按钮 -->
+<button id="back-to-top" title="回到顶部">↑</button>
 <div id="app">
   <!-- 顶部导航 -->
   <nav class="navbar">
@@ -31,6 +35,7 @@
       <button class="tab" data-tab="chat">智能问答</button>
       <button class="tab" data-tab="task-convert">任务转化</button>
       <button class="tab api-key-tab" data-tab="api-key" title="配置AI加速">🔑</button>
+      <button class="theme-toggle" id="theme-toggle" title="切换亮/暗模式">🌓</button>
     </div>
   </nav>
 
@@ -108,6 +113,17 @@
         <div id="related-jobs" class="related-jobs"></div>
       </div>
     </div>
+    <div id="map-skeleton" class="skeleton-container" style="display:none">
+      <div class="skeleton-map">
+        <div class="skeleton skeleton-stat"></div>
+        <div class="skeleton skeleton-stat"></div>
+        <div class="skeleton skeleton-stat"></div>
+        <div class="skeleton skeleton-stat"></div>
+      </div>
+      <div class="skeleton skeleton-chart"></div>
+      <div class="skeleton skeleton-section"></div>
+      <div class="skeleton skeleton-section"></div>
+    </div>
     <div id="map-loading" class="loading" style="display:none">
       <div class="spinner"></div>
       <p>AI正在生成能力图谱，请稍候...</p>
@@ -159,6 +175,14 @@
       <div class="trajectory-card">
         <h3>📈 成长轨迹预测</h3>
         <canvas id="trajectory-chart" width="600" height="200"></canvas>
+      </div>
+    </div>
+    <div id="path-skeleton" class="skeleton-container" style="display:none">
+      <div class="skeleton skeleton-diagnosis"></div>
+      <div class="skeleton-path">
+        <div class="skeleton skeleton-phase"></div>
+        <div class="skeleton skeleton-phase"></div>
+        <div class="skeleton skeleton-phase"></div>
       </div>
     </div>
     <div id="path-loading" class="loading" style="display:none">
@@ -314,6 +338,113 @@
 
 <script src="/static/js/zhipu-api.js"></script>
 <script src="/static/js/app.js"></script>
+<script>
+// ============ 前端UX增强 ============
+
+// --- 1. 阅读进度条 ---
+(function() {
+  var progressBar = document.getElementById('reading-progress');
+  function updateProgress() {
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  window.addEventListener('resize', updateProgress, { passive: true });
+  updateProgress();
+})();
+
+// --- 2. 回到顶部按钮 ---
+(function() {
+  var btn = document.getElementById('back-to-top');
+  function toggleBtn() {
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    if (scrollTop > 400) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  }
+  window.addEventListener('scroll', toggleBtn, { passive: true });
+  btn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  toggleBtn();
+})();
+
+// --- 3. 骨架屏加载 ---
+(function() {
+  var mapSkeleton = document.getElementById('map-skeleton');
+  var mapLoading = document.getElementById('map-loading');
+  var pathSkeleton = document.getElementById('path-skeleton');
+  var pathLoading = document.getElementById('path-loading');
+
+n  // 能力图谱骨架屏
+  var origMapBtn = document.getElementById('gen-map-btn');
+  if (origMapBtn) {
+    origMapBtn.addEventListener('click', function() {
+      mapSkeleton.style.display = 'block';
+    });
+  }
+
+  // 监听map-loading和map-result的显示变化
+  var mapObserver = new MutationObserver(function() {
+    if (mapResult.style.display !== 'none' || mapLoading.style.display !== 'none') {
+      mapSkeleton.style.display = 'none';
+    }
+  });
+  mapObserver.observe(mapResult, { attributes: true, attributeFilter: ['style'] });
+  mapObserver.observe(mapLoading, { attributes: true, attributeFilter: ['style'] });
+
+  // 学习路径骨架屏
+  var origPathBtn = document.getElementById('gen-path-btn');
+  if (origPathBtn) {
+    origPathBtn.addEventListener('click', function() {
+      pathSkeleton.style.display = 'block';
+    });
+  }
+
+  var pathResult = document.getElementById('path-result');
+  var pathObserver = new MutationObserver(function() {
+    if (pathResult.style.display !== 'none' || pathLoading.style.display !== 'none') {
+      pathSkeleton.style.display = 'none';
+    }
+  });
+  pathObserver.observe(pathResult, { attributes: true, attributeFilter: ['style'] });
+  pathObserver.observe(pathLoading, { attributes: true, attributeFilter: ['style'] });
+})();
+
+// --- 4. 亮/暗模式切换 ---
+(function() {
+  var toggleBtn = document.getElementById('theme-toggle');
+  var savedTheme = localStorage.getItem('zhihui-theme');
+
+  function applyTheme(mode) {
+    if (mode === 'light') {
+      document.body.classList.add('light-mode');
+      toggleBtn.textContent = '🌙';
+      document.querySelector('meta[name="theme-color"]').content = '#f5f7fb';
+    } else {
+      document.body.classList.remove('light-mode');
+      toggleBtn.textContent = '🌓';
+      document.querySelector('meta[name="theme-color"]').content = '#0f172a';
+    }
+  }
+
+  // 初始化
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  }
+
+  toggleBtn.addEventListener('click', function() {
+    var isLight = document.body.classList.contains('light-mode');
+    var newMode = isLight ? 'dark' : 'light';
+    localStorage.setItem('zhihui-theme', newMode);
+    applyTheme(newMode);
+  });
+})();
+</script>
 <script>
 (function(){
   var p={path:location.pathname,title:document.title,referrer:document.referrer,duration:0};
