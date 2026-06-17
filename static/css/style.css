@@ -1,4 +1,4 @@
-/* 职慧Agent CSS v1.3.1 - 暗色主题 + 粒子背景 + 动画增强 */
+/* 职慧Agent CSS v1.3.2 - 暗色主题 + 粒子背景 + 动画增强 + UX增强 */
 
 :root {
   --bg-primary: #0b0d14;
@@ -972,4 +972,234 @@ body {
 /* === 流式聊天光标 === */
 @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
 .chat-msg.streaming .msg-content { color: var(--text-primary); }
+
+/* ============ 1. 阅读进度条 ============ */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: linear-gradient(90deg, #3b82f6, var(--accent));
+  z-index: 200;
+  transition: width 0.1s linear;
+  pointer-events: none;
+}
+
+/* ============ 2. 回到顶部按钮 ============ */
+#back-to-top {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(28, 31, 58, 0.9);
+  color: var(--text-secondary);
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+}
+
+#back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+#back-to-top:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(124, 111, 255, 0.4);
+}
+
+/* ============ 3. 骨架屏 ============ */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-card) 25%,
+    rgba(124, 111, 255, 0.08) 37%,
+    var(--bg-card) 63%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* 能力图谱骨架卡片 */
+.skeleton-map {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.skeleton-stat {
+  height: 72px;
+  border-radius: 12px;
+}
+
+.skeleton-chart {
+  height: 300px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+}
+
+.skeleton-section {
+  height: 200px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+}
+
+.skeleton-paragraph {
+  height: 20px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+}
+
+.skeleton-paragraph:nth-child(2) { width: 80%; }
+.skeleton-paragraph:nth-child(3) { width: 60%; }
+
+/* 学习路径骨架 */
+.skeleton-path {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skeleton-phase {
+  height: 120px;
+  border-radius: var(--radius);
+}
+
+.skeleton-diagnosis {
+  height: 160px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+}
+
+/* ============ 4. 亮/暗模式切换 ============ */
+.theme-toggle {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: var(--transition);
+  line-height: 1;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent-light);
+  background: rgba(124, 111, 255, 0.1);
+}
+
+/* 亮色模式变量覆盖 */
+body.light-mode {
+  --bg-primary: #f5f7fb;
+  --bg-secondary: #ffffff;
+  --bg-card: #f0f2f8;
+  --bg-input: #e8eaf0;
+  --accent: #5b4ad4;
+  --accent-light: #7c6fff;
+  --accent-dark: #4a3ab8;
+  --text-primary: #1a1d2e;
+  --text-secondary: #4a4d6a;
+  --text-muted: #8b8ea8;
+  --border: #d8dbe8;
+  --success: #00c896;
+  --warning: #e6a020;
+  --danger: #e05070;
+  --shadow: 0 8px 32px rgba(90, 74, 212, 0.1);
+  background-image:
+    radial-gradient(ellipse at top left, rgba(91, 74, 212, 0.04), transparent 75%),
+    radial-gradient(ellipse at bottom right, rgba(74, 58, 184, 0.03), transparent 70%);
+}
+
+body.light-mode #app::before {
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(91, 74, 212, 0.25), transparent),
+    radial-gradient(1px 1px at 30% 60%, rgba(0, 200, 150, 0.2), transparent),
+    radial-gradient(1.5px 1.5px at 50% 10%, rgba(124, 111, 255, 0.2), transparent),
+    radial-gradient(1px 1px at 70% 80%, rgba(91, 74, 212, 0.15), transparent),
+    radial-gradient(1.5px 1.5px at 85% 35%, rgba(0, 200, 150, 0.15), transparent),
+    radial-gradient(1px 1px at 20% 90%, rgba(224, 80, 112, 0.1), transparent),
+    radial-gradient(1px 1px at 90% 70%, rgba(91, 74, 212, 0.15), transparent),
+    radial-gradient(1px 1px at 45% 45%, rgba(124, 111, 255, 0.12), transparent),
+    radial-gradient(1.5px 1.5px at 60% 25%, rgba(0, 200, 150, 0.18), transparent),
+    radial-gradient(1px 1px at 15% 55%, rgba(91, 74, 212, 0.12), transparent);
+}
+
+body.light-mode .navbar {
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom-color: rgba(91, 74, 212, 0.12);
+}
+
+body.light-mode .skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-card) 25%,
+    rgba(91, 74, 212, 0.06) 37%,
+    var(--bg-card) 63%
+  );
+  background-size: 800px 100%;
+}
+
+body.light-mode #back-to-top {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-secondary);
+  border-color: var(--border);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode #back-to-top:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* 阅读进度条 */
+#reading-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--success));
+  z-index: 9999;
+  transition: width 0.15s ease;
+  width: 0;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  #back-to-top {
+    bottom: 20px;
+    right: 20px;
+  }
+  .theme-toggle {
+    font-size: 16px;
+    padding: 4px 8px;
+  }
+}
 
