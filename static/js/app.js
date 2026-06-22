@@ -694,6 +694,8 @@ function removeTyping() {
 async function sendChat() {
   const text = chatInput.value.trim();
   if (!text) return;
+  // 付费墙：免费10次问答，之后29元/月
+  if (!Paywall.tryUse('chat', { price: '29', desc: '无限次数智能问答 · 岗位能力图谱 · 学习路径规划', freeLimit: 10, contactWx: 'a5050e' })) return;
   chatInput.value = '';
 
   chatHistory.push({ role: 'user', content: text });
